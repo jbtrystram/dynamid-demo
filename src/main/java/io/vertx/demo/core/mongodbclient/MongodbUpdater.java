@@ -23,16 +23,24 @@ public class MongodbUpdater extends AbstractVerticle {
 
         // Bus settings and instance
         final String busAddress = "raw_temperature";
+        final String busProcessedAdress = "median_temperature";
         EventBus eb = vertx.eventBus();
 
         //mongoDB settings, get from config json file
         JsonObject mongoConfig = config();
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
 
-        //When new message on bus" ID " : " (String) ",
+        //When new message on raw_temperature on bus
         eb.<JsonObject> consumer(busAddress, message -> {
             mongoClient.insert(busAddress, message.body(), res -> {
-                System.out.println("Inserted id: " + res.result());
+                System.out.println("Inserted raw value with id: " + res.result());
+            });
+        });
+
+        //When new message on median_temperature on bus
+        eb.<JsonObject> consumer(busProcessedAdress, message -> {
+            mongoClient.insert(busProcessedAdress, message.body(), res -> {
+                System.out.println("Inserted median value with id: " + res.result());
             });
         });
 

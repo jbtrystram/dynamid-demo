@@ -46,7 +46,7 @@ public class Receiver extends AbstractVerticle {
 
         // Print body of received AMQP message
         System.out.println("Received an AMQP message, publishing on bus");
-        eb.send(busAddress, amqpBody);
+        eb.publish(busAddress, amqpBody);
       });
     });
 

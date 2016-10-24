@@ -7,7 +7,6 @@ import io.vertx.amqpbridge.AmqpBridge;
 import io.vertx.amqpbridge.AmqpConstants;
 import io.vertx.core.eventbus.MessageProducer;
 
-import java.security.Timestamp;
 import java.util.Random;
 import java.time.Instant;
 
