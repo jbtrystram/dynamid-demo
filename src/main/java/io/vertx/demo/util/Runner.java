@@ -1,4 +1,4 @@
-package io.vertx.example.util;
+package io.vertx.demo.util;
 
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;

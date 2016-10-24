@@ -1,0 +1,15 @@
+{
+  "hosts":[
+
+    {"host":"localhost","port":27020},
+    {"host":"localhost","port":27020},
+    {"host":"localhost","port":27020},
+    {"host":"localhost","port":27020}],
+
+  "replicaSet":"rs",
+  "db_name":"test",
+  "keepAlive":true,
+  "connectTimeoutMS":600000
+
+}
+

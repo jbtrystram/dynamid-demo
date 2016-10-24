@@ -11,17 +11,17 @@ import io.vertx.core.eventbus.MessageProducer;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class Sender extends AbstractVerticle {
+    // Convenience method so you can run it in your IDE
+    public static void main(String[] args) {
+        Runner.runExample(Sender.class);
+    }
+
 
   // Settings
   final String amqptopicAddress = "temperature";
   final String amqpServer = "localhost";
 
   private int count = 1;
-
-  // Convenience method so you can run it in your IDE
-  public static void main(String[] args) {
-    Runner.runClusteredExample(Sender.class);
-  }
 
     @Override
     public void start() throws Exception {
