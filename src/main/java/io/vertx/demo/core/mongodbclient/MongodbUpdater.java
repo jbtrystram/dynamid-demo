@@ -3,6 +3,7 @@ package io.vertx.demo.core.mongodbclient;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 
 
@@ -24,6 +25,7 @@ public class MongodbUpdater extends AbstractVerticle {
         // Bus settings and instance
         final String busAddress = "raw_temperature";
         final String busProcessedAdress = "median_temperature";
+        final String dataRequest = "data_request";
         EventBus eb = vertx.eventBus();
 
         //mongoDB settings, get from config json file
@@ -44,6 +46,23 @@ public class MongodbUpdater extends AbstractVerticle {
             });
         });
 
+
+        //When request for the last median temp
+        eb.<JsonObject> consumer(dataRequest, message -> {
+            if (message.body().getBoolean("median")) {
+                FindOptions opts = new FindOptions();
+                opts.setLimit(1);
+                opts.setSort(new JsonObject().put("_id", "-1"));
+
+                mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
+                    if (res.succeeded()) {
+                        message.reply(res.result().get(0));
+                    } else {
+                        message.reply(new JsonObject().put("fail", true));
+                    }
+                });
+            }
+        });
         System.out.println("Ready!");
     }
 }
