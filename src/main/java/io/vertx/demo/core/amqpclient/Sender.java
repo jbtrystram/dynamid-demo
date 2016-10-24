@@ -7,6 +7,10 @@ import io.vertx.amqpbridge.AmqpBridge;
 import io.vertx.amqpbridge.AmqpConstants;
 import io.vertx.core.eventbus.MessageProducer;
 
+import java.security.Timestamp;
+import java.util.Random;
+import java.time.Instant;
+
 /*
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
@@ -21,7 +25,14 @@ public class Sender extends AbstractVerticle {
   final String amqptopicAddress = "temperature";
   final String amqpServer = "localhost";
 
-  private int count = 1;
+    private double baseTemp = 19;
+    private int count = 1;
+    private double getTemp() {
+        Random generator = new Random();
+        return this.baseTemp + ((generator.nextDouble()*2)-1);
+    }
+
+
 
     @Override
     public void start() throws Exception {
@@ -41,11 +52,13 @@ public class Sender extends AbstractVerticle {
             System.out.println("Producer created, scheduling sends.");
             vertx.setPeriodic(1000, v -> {
                 JsonObject amqpMsgPayload = new JsonObject();
-                amqpMsgPayload.put(AmqpConstants.BODY, "Hey, value is " + count);
+                amqpMsgPayload.put("timestamp", Instant.now().getEpochSecond())
+                .put("id", 3).put("value",this.getTemp());
 
-                producer.send(amqpMsgPayload);
+                producer.send(new JsonObject().put(AmqpConstants.BODY,  amqpMsgPayload));
 
-                System.out.println("Sent message: " + count++);
+                System.out.println("Sent value " + count++ );
+                System.out.println(amqpMsgPayload);
             });
         });
     }
