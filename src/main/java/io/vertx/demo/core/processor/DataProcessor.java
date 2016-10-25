@@ -45,10 +45,11 @@ public class DataProcessor extends AbstractVerticle {
 
             //When new message on bus
             eb.<JsonObject> consumer(busAddress, message -> {
-                if (isNormal(Double.parseDouble( message.body().getString("value")), medianTempValue)) {
-                    computeAverage(Double.parseDouble(message.body().getString("value")));
+                Double value = message.body().getDouble("value");
+                if (isNormal( value, medianTempValue)) {
+                    computeAverage(value);
 
-                    if ((rawTempMsgCount % 3) == 0) {
+                      if ((rawTempMsgCount % 3) == 0) {
                         JsonObject data = new JsonObject();
                         data.put("timestamp",Instant.now().getEpochSecond())
                                 .put("value", medianTempValue);
