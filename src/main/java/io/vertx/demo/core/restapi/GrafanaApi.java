@@ -27,19 +27,22 @@ public class GrafanaApi extends AbstractVerticle {
     // Convenience method so you can run it in your IDE
     public static void main(String[] args) { Runner.runClusteredExample(GrafanaApi.class); }
 
+    // A JsonArray to store datapoints between requests (grafana doesn't do it)
+    JsonArray res = new JsonArray().add(new JsonObject()
+            .put("target", "median_temp")
+            .put("datapoints", new JsonArray()
+            ));
+
     private JsonArray formResponse(String incoming){
-        JsonArray res = new JsonArray();
+
         JsonObject data = new JsonObject(incoming);
 
-        res.add(new JsonObject()
-                .put("target", "median_temp")
-                .put("datapoints", new JsonArray()
-                        .add(new JsonArray()
-                                .add(data.getDouble("value"))
-                                .add(data.getInteger("timestamp"))
-                        )
-                )
-        );
+        res.getJsonObject(0).getJsonArray("datapoints")
+                .add( new JsonArray()
+                      .add(data.getDouble("value"))
+                      .add(data.getLong("timestamp"))
+                );
+
         return res;
     }
 

@@ -3,7 +3,6 @@ package io.vertx.demo.core.processor;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
-import java.time.Instant;
 
 import io.vertx.demo.util.Runner;
 
@@ -51,7 +50,7 @@ public class DataProcessor extends AbstractVerticle {
 
                       if ((rawTempMsgCount % 3) == 0) {
                         JsonObject data = new JsonObject();
-                        data.put("timestamp",Instant.now().getEpochSecond())
+                        data.put("timestamp", System.currentTimeMillis())
                                 .put("value", medianTempValue);
                         eb.publish(busProcessedAdress, data);
 
