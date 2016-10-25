@@ -2,6 +2,8 @@ package io.vertx.demo.core.restapi;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.impl.codecs.StringMessageCodec;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
@@ -25,6 +27,22 @@ public class GrafanaApi extends AbstractVerticle {
     // Convenience method so you can run it in your IDE
     public static void main(String[] args) { Runner.runClusteredExample(GrafanaApi.class); }
 
+    private JsonArray formResponse(String incoming){
+        JsonArray res = new JsonArray();
+        JsonObject data = new JsonObject(incoming);
+
+        res.add(new JsonObject()
+                .put("target", "median_temp")
+                .put("datapoints", new JsonArray()
+                        .add(new JsonArray()
+                                .add(data.getDouble("value"))
+                                .add(data.getInteger("timestamp"))
+                        )
+                )
+        );
+        return res;
+    }
+
     @Override
     public void start(Future<Void> fut) throws Exception {
 
@@ -37,6 +55,9 @@ public class GrafanaApi extends AbstractVerticle {
         EventBus eb = vertx.eventBus();
 
 
+        // Enable reading requests' bodies
+        router.route().handler(BodyHandler.create());
+
         // Bind "/" to a 200 OK response.
         router.route("/").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
@@ -44,19 +65,34 @@ public class GrafanaApi extends AbstractVerticle {
                     .putHeader("content-type", "text/html")
                     .setStatusCode(200)
                     .end("");
-            System.out.println("got hit");
+            System.out.println(" request recevied on / ");
         });
 
 
         // Bind "/search" to
         router.route("/search").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
-            eb.send(busDataRequest, new JsonObject().put("median", true), res -> {
-                response.putHeader("content-type", "text/html")
+            System.out.println(" /search request");
+                response.putHeader("content-type", "application/json; charset=utf-8")
                         .setStatusCode(200)
-                        .end(res.result().body().toString());
-            });
+                        .end("[\"raw_temp\",\"median_temp\"]");
+        });
 
+
+        // Bind "/query" to
+        router.route("/query").handler(routingContext -> {
+            HttpServerResponse response = routingContext.response();
+
+            // request median value
+            if (routingContext.getBodyAsJson().getJsonArray("targets")
+                    .getJsonObject(0).getString("target").equals("median_temp")) {
+
+                eb.send(busDataRequest, new JsonObject().put("median", true), res -> {
+                    response.putHeader("content-type", "application/json; charset=utf-8")
+                            .setStatusCode(200)
+                            .end(formResponse(res.result().body().toString()).encode());
+                });
+            }
         });
 
 
@@ -76,8 +112,6 @@ public class GrafanaApi extends AbstractVerticle {
                             }
                         }
                 );
-
-
     }
 
 }

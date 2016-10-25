@@ -52,7 +52,7 @@ public class MongodbUpdater extends AbstractVerticle {
             if (message.body().getBoolean("median")) {
                 FindOptions opts = new FindOptions();
                 opts.setLimit(1);
-                opts.setSort(new JsonObject().put("_id", "-1"));
+                opts.setSort(new JsonObject().put("_id", -1));
 
                 mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
