@@ -44,8 +44,6 @@ public class Receiver extends AbstractVerticle {
         JsonObject amqpMsgPayload = vertxMsg.body();
         Object amqpBody = amqpMsgPayload.getValue(AmqpConstants.BODY);
 
-        // Print body of received AMQP message
-        System.out.println("Received an AMQP message, publishing on bus");
         eb.publish(busAddress, amqpBody);
       });
     });

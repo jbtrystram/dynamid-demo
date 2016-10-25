@@ -35,14 +35,12 @@ public class MongodbUpdater extends AbstractVerticle {
         //When new message on raw_temperature on bus
         eb.<JsonObject> consumer(busAddress, message -> {
             mongoClient.insert(busAddress, message.body(), res -> {
-                System.out.println("Inserted raw value with id: " + res.result());
             });
         });
 
         //When new message on median_temperature on bus
         eb.<JsonObject> consumer(busProcessedAdress, message -> {
             mongoClient.insert(busProcessedAdress, message.body(), res -> {
-                System.out.println("Inserted median value with id: " + res.result());
             });
         });
 

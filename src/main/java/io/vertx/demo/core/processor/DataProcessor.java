@@ -54,7 +54,6 @@ public class DataProcessor extends AbstractVerticle {
                                 .put("value", medianTempValue);
                         eb.publish(busProcessedAdress, data);
 
-                        System.out.println("Published Average : "+ medianTempValue);
                     }
                 }
             });

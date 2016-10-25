@@ -56,8 +56,6 @@ public class Sender extends AbstractVerticle {
 
                 producer.send(new JsonObject().put(AmqpConstants.BODY,  amqpMsgPayload));
 
-                System.out.println("Sent value " + count++ );
-                System.out.println(amqpMsgPayload);
             });
         });
     }
