@@ -10,20 +10,20 @@ MONGODB3=$(ping -c 1 node03 | head -1  | cut -d "(" -f 2 | cut -d ")" -f 1)
 MONGODB4=$(ping -c 1 node04 | head -1  | cut -d "(" -f 2 | cut -d ")" -f 1)
 
 echo "Waiting for startup.."
-until curl --silent http://${MONGODB1}:28017/ 2>&1 | grep -q 'waiting for connections on port'; do
+until curl --silent http://127.0.0.1:28017/ 2>&1 | grep -q 'waiting for connections on port'; do
   printf '.'
   sleep 1
 done
 echo ''
 
-echo curl --silent http://${MONGODB1}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
+echo curl --silent http://127.0.0.1:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
 echo "MongoDB instances are ready.."
 
 sleep 10
 
 echo "Initiating replication."
 echo SETUP.sh time now: $(date +"%T")
-mongo --host ${MONGODB1}:27017 <<EOF
+mongo --host 127.0.0.1:27017 <<EOF
    var cfg = {
         "_id": "rs",
         "version": 1,
