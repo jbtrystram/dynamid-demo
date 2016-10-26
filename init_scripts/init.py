@@ -10,20 +10,23 @@ from sense_hat import SenseHat
 
 ############### S E T T I N G S #############
 
-# Dependancies you want to install with apt-get install
-deps = ["docker", "maven", "git"]
+# Dependancies you want to install with apt-get
+deps = ["updaaate", "-y install maven", "-y install git", "-y install curl"]
 
 # Arbitrary commands you need to run
-commands = ["git pull https://github.com/jbtrystram/dynamid-demo.git", "cd dynamid-demo"]
+commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", 
+"cd dynamid-demo", "usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes"]
+
 
 # Docker commands 
 dockers = ["build -t sensor-app container-pika/.",
 "pull ronnyroos/rpi-rabbitmq", 
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
-"run -d -e RABBITMQ_NODENAME=rabbit --name rabbit -p 15672:15672 -p 5672:5672 -v /rabbit/data/log:/data/log -v /rabbit/data/mnesia:/data/mnesia ronnyroos/rpi-rabbitmq",
-"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v $PWD/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6" 
-"run  -p 27017:27017 -p 28017:28017 -v $PWD/nodes:/nodes --rm descol/rpi-mongo:master1.6"]
+"stop $(docker ps -a -q)", "rm -f $(docker ps -a -q)",
+"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 -v /rabbit/data/log:/data/log -v /rabbit/data/mnesia:/data/mnesia ronnyroos/rpi-rabbitmq",
+"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/hostes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6", 
+"run  --name mongoConfig -v /tmp/hosts:/nodes --rm descol/rpi-mongo:master1.6"]
 
 
 ######################################################################
@@ -58,15 +61,15 @@ def color_pixel(i):
 
 
 def install_dependencies(): 
-    i=0
+    i=2
     q.put(i)
 
     # Install dependencies with apt-get
     for dep in deps:
         print("Installing "+ dep +"...")
-        os.system('apt-get install -y '+dep)
+        os.system('apt-get '+dep)
         print("[OK]")
-        i = i+3
+        i = i+2
         q.put(i)
 
     # Run arbitrary commands
@@ -77,9 +80,10 @@ def install_dependencies():
         i = i+2
         q.put(i)
 
-     # Run docker tasks
-     for dock in dockers:
-        os.system("docker "+cmd)
+    # Run docker tasks
+    for dock in dockers:
+        print("Runnig docker " +dock+ "...")
+        os.system("docker "+dock)
         i = i+2
         q.put(i)
 
@@ -101,7 +105,7 @@ def visual_feedback():
             while (q.empty()):
                 color_pixel(item)
                 time.sleep(0.5)
-                color_pixel(item-1)
+                color_pixel(item-2)
                 time.sleep(0.5)
             q.task_done()
 	
