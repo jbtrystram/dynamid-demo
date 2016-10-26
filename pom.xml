@@ -83,7 +83,7 @@
                   </transformer>
                 </transformers>
                 <artifactSet/>
-                <outputFile>${project.build.directory}/demo-dynamid-MongodbUpdater-fat.jar</outputFile>
+                <outputFile>${project.basedir}/fatjars/demo-dynamid-MongodbUpdater-fat.jar</outputFile>
               </configuration>
             </execution>
 
@@ -105,7 +105,7 @@
                   </transformer>
                 </transformers>
                 <artifactSet/>
-                <outputFile>${project.build.directory}/demo-dynamid-DataProcessor-fat.jar</outputFile>
+                <outputFile>${project.basedir}/fatjars/demo-dynamid-DataProcessor-fat.jar</outputFile>
               </configuration>
             </execution>
 
@@ -127,7 +127,7 @@
                   </transformer>
                 </transformers>
                 <artifactSet/>
-                <outputFile>${project.build.directory}/demo-dynamid-Receiver-fat.jar</outputFile>
+                <outputFile>${project.basedir}/fatjars/demo-dynamid-Receiver-fat.jar</outputFile>
               </configuration>
             </execution>
 
@@ -149,7 +149,7 @@
                   </transformer>
                 </transformers>
                 <artifactSet/>
-                <outputFile>${project.build.directory}/demo-dynamid-GrafanaApi-fat.jar</outputFile>
+                <outputFile>${project.basedir}/fatjars/demo-dynamid-GrafanaApi-fat.jar</outputFile>
               </configuration>
             </execution>
 
