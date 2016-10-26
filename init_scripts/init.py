@@ -14,8 +14,8 @@ from sense_hat import SenseHat
 deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
 
 # Arbitrary commands you need to run
-commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", 
-"cd dynamid-demo", "usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt"]
+commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", "cd dynamid-demo", "git pull",
+"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt"]
 
 
 # Docker commands 
