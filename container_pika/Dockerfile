@@ -11,3 +11,7 @@ RUN apt-get -q update && \
         python-pip \
         python-pika \
         sense-hat
+
+ADD ./sense.py ./app.py
+
+CMD ["python", "app.py"]
