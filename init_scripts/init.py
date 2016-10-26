@@ -8,15 +8,14 @@ import time
 import queue
 from sense_hat import SenseHat
 
-############### S E T T I N G S #############
+############### S E T T I N G S #############oracle-java8-jdk
 
 # Dependancies you want to install with apt-get
-deps = ["updaaate", "-y install maven", "-y install git", "-y install curl"]
+deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
 
 # Arbitrary commands you need to run
 commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", 
-"cd dynamid-demo", "usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes"]
-#TODO : set java home
+"cd dynamid-demo", "usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt"]
 
 
 # Docker commands 
