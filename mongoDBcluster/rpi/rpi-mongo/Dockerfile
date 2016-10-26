@@ -7,4 +7,4 @@ VOLUME /mongodb
 EXPOSE 27017 28017
 COPY run.sh /
 ENTRYPOINT ["/run.sh"]
-CMD ["mongod", "--replSet", "rs", "--smallfiles", "--rest","--dbpath", "/mongodb/data"]
+CMD ["mongod", "--replSet", "rs", "--smallfiles", "--rest","--journal","--dbpath", "/mongodb/data"]
