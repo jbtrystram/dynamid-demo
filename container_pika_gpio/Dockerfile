@@ -11,4 +11,3 @@ RUN apt-get -q update && \
         python-pip \
         python-pika \
         sense-hat
-RUN pip install rpi.gpio
