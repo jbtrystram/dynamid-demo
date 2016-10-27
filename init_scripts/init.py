@@ -19,7 +19,7 @@ commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtry
 
 
 # Docker commands 
-dockers = ["build -t sensor-app container_pika/.",
+dockers = ["pull descol/rpi_pika",
 "pull ronnyroos/rpi-rabbitmq", 
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
@@ -95,10 +95,14 @@ def install_dependencies():
         i = i+2
         q.put(i)
 
+   
+    #Run Vert.X verticles
+
 
     # Finally, launch the app
-    # docker run --privileged --link rabbit:rabbit sensor-app
-
+    # docker run --privileged --link rabbit:rabbit descol/rpi_pika
+    #i = i+2
+    #q.put(i)
 
 
 		
