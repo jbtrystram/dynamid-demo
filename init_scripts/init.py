@@ -8,7 +8,7 @@ import time
 import queue
 from sense_hat import SenseHat
 
-############### S E T T I N G S #############oracle-java8-jdk
+############### S E T T I N G S #############
 
 # Dependancies you want to install with apt-get
 deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
