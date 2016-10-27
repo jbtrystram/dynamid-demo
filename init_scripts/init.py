@@ -14,18 +14,18 @@ from sense_hat import SenseHat
 deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
 
 # Arbitrary commands you need to run
-commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", "cd dynamid-demo", "git pull",
-"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/{java,javac}", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
+commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git /demo", 
+"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/java", "rm /usr/bin/javac", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
 
 
 # Docker commands 
-dockers = ["build -t sensor-app container-pika/.",
+dockers = ["build -t sensor-app container_pika/.",
 "pull ronnyroos/rpi-rabbitmq", 
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
 "stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
 "run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 -v rabbitLogs:/data/log -v rabbitData:/data/mnesia ronnyroos/rpi-rabbitmq",
-"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6 &", 
+"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
 "run  --rm --name mongoConfig --link=mongo:mongo  -v /tmp/nodes:/nodes descol/rpi-mongo:master1.6"
 ]
 
@@ -77,6 +77,13 @@ def install_dependencies():
         print("[OK]")
         i = i+2
         q.put(i)
+
+
+    #cd into the git repo and pull for last files
+    os.chdir("/demo")
+    os.system("git pull")
+    i = i+2
+    q.put(i)
 
     # Run docker tasks
     for dock in dockers:
