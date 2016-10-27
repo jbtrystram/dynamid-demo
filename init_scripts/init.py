@@ -48,13 +48,16 @@ def pixel_green_done():
     pixels = [black for j in range(64)]
 
 
-def color_pixel(i):
+def color_pixel(px_g, px_r):
     red = [255, 0, 0]  
     black = [0, 0, 0] 
     green = (0, 255, 0)
     white = (255, 255, 255)
 
-    pixels = [red if j < i else black for j in range(64)]
+    pixels = [green if j < px_g else black for j in range(64)]
+    for k in range(px_r):
+        pixels[px_g+k] = red
+
     sense.set_pixels(pixels)
 
 
@@ -108,9 +111,9 @@ def visual_feedback():
             break
         else :
             while (q.empty()):
-                color_pixel(item)
+                color_pixel(item, 2)
                 time.sleep(0.5)
-                color_pixel(item-2)
+                color_pixel(item, 0)
                 time.sleep(0.5)
             q.task_done()
 	
