@@ -11,11 +11,11 @@ from sense_hat import SenseHat
 ############### S E T T I N G S #############
 
 # Dependancies you want to install with apt-get
-deps = ["updaaate", "-y install maven", "-y install git", "-y install curl"]
+deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
 
 # Arbitrary commands you need to run
-commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", 
-"cd dynamid-demo", "usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes"]
+commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", "cd dynamid-demo", "git pull",
+"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/{java,javac}", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
 
 
 # Docker commands 
@@ -23,10 +23,11 @@ dockers = ["build -t sensor-app container-pika/.",
 "pull ronnyroos/rpi-rabbitmq", 
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
-"stop $(docker ps -a -q)", "rm -f $(docker ps -a -q)",
-"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 -v /rabbit/data/log:/data/log -v /rabbit/data/mnesia:/data/mnesia ronnyroos/rpi-rabbitmq",
-"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/hostes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6", 
-"run  --name mongoConfig -v /tmp/hosts:/nodes --rm descol/rpi-mongo:master1.6"]
+"stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
+"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 -v rabbitLogs:/data/log -v rabbitData:/data/mnesia ronnyroos/rpi-rabbitmq",
+"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6 &", 
+"run  --rm --name mongoConfig --link=mongo:mongo  -v /tmp/nodes:/nodes descol/rpi-mongo:master1.6"
+]
 
 
 ######################################################################
@@ -45,9 +46,6 @@ def pixel_green_done():
     sense.set_pixels(pixels)
     time.sleep(0.5)
     pixels = [black for j in range(64)]
-    time.sleep(0.2)
-    pixels = [green for j in range(64)]
-
 
 
 def color_pixel(i):
