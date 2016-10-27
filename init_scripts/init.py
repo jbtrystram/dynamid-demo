@@ -15,7 +15,7 @@ deps = ["updaaate", "-y install maven", "-y install git", "-y install curl", "-y
 
 # Arbitrary commands you need to run
 commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", "cd dynamid-demo", "git pull",
-"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt"]
+"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/{java,javac}", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
 
 
 # Docker commands 
