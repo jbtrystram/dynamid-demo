@@ -6,9 +6,9 @@ docker run -d -e RABBITMQ_NODENAME=rabbit --name rabbit -p 15672:15672 \
     -v /rabbit/data/mnesia:/data/mnesia ronnyroos/rpi-rabbitmq
 ```
 
-To launch container with the test switch code and the 
+To launch container with the sensehat code and the 
 rights on the GPIO and linked to a rabbit container:
 
 ```
-docker run -ti --privileged --link rabbit:rabbit test_switch
+docker run -ti --privileged --link rabbit:rabbit descol/rpi_pika
 ```
