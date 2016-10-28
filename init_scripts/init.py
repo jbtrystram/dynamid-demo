@@ -11,7 +11,7 @@ from sense_hat import SenseHat
 ############### S E T T I N G S #############
 
 # Dependancies you want to install with apt-get
-deps = ["updaaate", "-y install maven", "-y install git", "-y install curl"]
+deps = ["updaaate", "-y install git", "-y install curl"]
 
 # Arbitrary commands you need to run
 commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git", 
@@ -39,6 +39,9 @@ threads = []
 
 #sense hat init 
 sense = SenseHat()
+
+#get hostname
+hostname = open('/etc/hostname').read()
 
 def pixel_green_done():
     green = (0, 255, 0)
@@ -88,7 +91,7 @@ def install_dependencies():
 
 
     # Finally, launch the app
-    # docker run --privileged --link rabbit:rabbit sensor-app
+    # "docker run --privileged --hostname " + hostname " --link rabbit:rabbit sensor-app"
 
 
 

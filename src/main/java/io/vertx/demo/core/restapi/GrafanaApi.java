@@ -27,23 +27,48 @@ public class GrafanaApi extends AbstractVerticle {
     // Convenience method so you can run it in your IDE
     public static void main(String[] args) { Runner.runClusteredExample(GrafanaApi.class); }
 
-    // A JsonArray to store datapoints between requests (grafana doesn't do it)
-    JsonArray res = new JsonArray().add(new JsonObject()
+    // A JsonArray to store the median datapoints between requests (grafana doesn't do it).
+    private JsonArray median = new JsonArray().add(new JsonObject()
             .put("target", "median_temp")
             .put("datapoints", new JsonArray()
             ));
 
-    private JsonArray formResponse(String incoming){
+    // Same : an array for each node
+    private JsonArray node01 = new JsonArray().add(new JsonObject()
+            .put("target", "node01")
+            .put("datapoints", new JsonArray()
+            ));
+
+    // Same : an array for each node
+    private JsonArray node02 = new JsonArray().add(new JsonObject()
+            .put("target", "node02")
+            .put("datapoints", new JsonArray()
+            ));
+
+    // Same : an array for each node
+    private JsonArray node03 = new JsonArray().add(new JsonObject()
+            .put("target", "node03")
+            .put("datapoints", new JsonArray()
+            ));
+
+    // Same : an array for each node
+    private JsonArray node04 = new JsonArray().add(new JsonObject()
+            .put("target", "node04")
+            .put("datapoints", new JsonArray()
+            ));
+
+
+    private JsonArray formResponse(String incoming, JsonArray array){
 
         JsonObject data = new JsonObject(incoming);
 
-        res.getJsonObject(0).getJsonArray("datapoints")
+        array.getJsonObject(0).getJsonArray("datapoints")
                 .add( new JsonArray()
                       .add(data.getDouble("value"))
                       .add(data.getLong("timestamp"))
                 );
 
-        return res;
+        return array;
     }
 
     @Override
@@ -78,7 +103,11 @@ public class GrafanaApi extends AbstractVerticle {
             System.out.println(" /search request");
                 response.putHeader("content-type", "application/json; charset=utf-8")
                         .setStatusCode(200)
-                        .end("[\"raw_temp\",\"median_temp\"]");
+                        .end(new JsonArray().add("node01")
+                                            .add("node02")
+                                            .add("node03")
+                                            .add("node04")
+                                            .add("median_temp").encode());
         });
 
 
@@ -86,14 +115,44 @@ public class GrafanaApi extends AbstractVerticle {
         router.route("/query").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
 
-            // request median value
-            if (routingContext.getBodyAsJson().getJsonArray("targets")
-                    .getJsonObject(0).getString("target").equals("median_temp")) {
+            // get requested value
+            String requested = routingContext.getBodyAsJson().getJsonArray("targets")
+                    .getJsonObject(0).getString("target");
 
+
+            if (requested.equals("median_temp")) {
                 eb.send(busDataRequest, new JsonObject().put("median", true), res -> {
                     response.putHeader("content-type", "application/json; charset=utf-8")
                             .setStatusCode(200)
-                            .end(formResponse(res.result().body().toString()).encode());
+                            .end(formResponse(res.result().body().toString(), median).encode());
+                });
+            }
+            else if (requested.equals("node01")) {
+                eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
+                    response.putHeader("content-type", "application/json; charset=utf-8")
+                            .setStatusCode(200)
+                            .end(formResponse(res.result().body().toString(), node01).encode());
+                });
+            }
+            else if (requested.equals("node02")) {
+                eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
+                    response.putHeader("content-type", "application/json; charset=utf-8")
+                            .setStatusCode(200)
+                            .end(formResponse(res.result().body().toString(), node02).encode());
+                });
+            }
+            else if (requested.equals("node03")) {
+                eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
+                    response.putHeader("content-type", "application/json; charset=utf-8")
+                            .setStatusCode(200)
+                            .end(formResponse(res.result().body().toString(), node03).encode());
+                });
+            }
+            else if (requested.equals("node04")) {
+                eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
+                    response.putHeader("content-type", "application/json; charset=utf-8")
+                            .setStatusCode(200)
+                            .end(formResponse(res.result().body().toString(), node04).encode());
                 });
             }
         });

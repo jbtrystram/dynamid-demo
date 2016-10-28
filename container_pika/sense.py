@@ -11,8 +11,8 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost')
 channel = connection.channel()
 channel.queue_declare(queue='temperature')
 
-# get MAC address of eth0 (used as unique ID)
-mac = open('/sys/class/net/eth0/address').read()
+# get hostname
+hostname = open('/etc/hostname').read()
 
 # Initialise SenseHat
 sense = SenseHat()
@@ -21,7 +21,7 @@ sense = SenseHat()
 def sendMessage(temp):
 	amqpMsgPayload = {}
 	amqpMsgPayload["timestamp"] = int((time.time()*1000))
-	amqpMsgPayload["id"] = mac[:-1]
+	amqpMsgPayload["id"] = hostname[:-1]
 	amqpMsgPayload["value"] = temp
 
 	print(json.dumps(amqpMsgPayload))

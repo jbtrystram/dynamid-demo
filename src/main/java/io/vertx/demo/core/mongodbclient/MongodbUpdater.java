@@ -45,14 +45,27 @@ public class MongodbUpdater extends AbstractVerticle {
         });
 
 
-        //When request for the last median temp
+        //When requested for data
         eb.<JsonObject> consumer(dataRequest, message -> {
+            FindOptions opts = new FindOptions();
+            opts.setLimit(1);
+            opts.setSort(new JsonObject().put("_id", -1));
+
+            // get median temp
             if (message.body().getBoolean("median")) {
-                FindOptions opts = new FindOptions();
-                opts.setLimit(1);
-                opts.setSort(new JsonObject().put("_id", -1));
 
                 mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
+                    if (res.succeeded()) {
+                        message.reply(res.result().get(0));
+                    } else {
+                        message.reply(new JsonObject().put("fail", true));
+                    }
+                });
+            }
+            // get raw individual nodes temp
+            else {
+                opts.setFields(new JsonObject().put("id", message.body().getString("requested")));
+                mongoClient.findWithOptions(busAddress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
                         message.reply(res.result().get(0));
                     } else {
