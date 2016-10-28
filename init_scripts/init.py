@@ -101,14 +101,9 @@ def install_dependencies():
    
     #Run Vert.X verticles
 
-<<<<<<< HEAD
-    # Finally, launch the app
-    # "docker run --privileged --hostname " + hostname " --link rabbit:rabbit sensor-app"
-=======
->>>>>>> 3f66e9bfb676003f3b0a27b68dd52f0e89a842b3
 
     # Finally, launch the app
-    # docker run --privileged --link rabbit:rabbit descol/rpi_pika
+    # "docker run --privileged --hostname " + hostname " --link rabbit:rabbit descol/rpi_pika"
     #i = i+2
     #q.put(i)
 
