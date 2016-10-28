@@ -7,7 +7,7 @@ from sense_hat import SenseHat
 
 
 #AMQP settings and connection
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbit'))
 channel = connection.channel()
 channel.queue_declare(queue='temperature')
 
