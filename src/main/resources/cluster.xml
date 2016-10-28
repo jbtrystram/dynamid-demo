@@ -29,15 +29,10 @@
       </tcp-ip>
     </join>
     <interfaces enabled="true">
+      <interface>10.45.0.112</interface>
       <interface>10.45.0.51</interface>
-    </interfaces>
-    <interfaces enabled="true">
       <interface>10.45.0.52</interface>
-    </interfaces>
-    <interfaces enabled="true">
       <interface>10.45.0.53</interface>
-    </interfaces>
-    <interfaces enabled="true">
       <interface>10.45.0.54</interface>
     </interfaces>
     <ssl enabled="false"/>
