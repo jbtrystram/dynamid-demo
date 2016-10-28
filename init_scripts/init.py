@@ -24,7 +24,7 @@ dockers = ["pull descol/rpi_pika",
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
 "stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
-"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 -v rabbitLogs:/data/log -v rabbitData:/data/mnesia ronnyroos/rpi-rabbitmq",
+"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 ronnyroos/rpi-rabbitmq",
 "run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
 "run  --rm --name mongoConfig --link=mongo:mongo  -v /tmp/nodes:/nodes descol/rpi-mongo:master1.6"
 ]
