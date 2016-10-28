@@ -29,7 +29,7 @@
       </tcp-ip>
     </join>
     <interfaces enabled="true">
-      <interface>127.0.0.1</interface>
+      <interface>wlan0</interface>
     </interfaces>
     <ssl enabled="false"/>
     <socket-interceptor enabled="false"/>
