@@ -114,6 +114,7 @@ public class GrafanaApi extends AbstractVerticle {
         // Bind "/query" to
         router.route("/query").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
+            System.out.println("/query hit");
 
             // get requested value
             String requested = routingContext.getBodyAsJson().getJsonArray("targets")
@@ -122,12 +123,14 @@ public class GrafanaApi extends AbstractVerticle {
 
             if (requested.equals("median_temp")) {
                 eb.send(busDataRequest, new JsonObject().put("median", true), res -> {
+                    System.out.println("median_temp requested");
                     response.putHeader("content-type", "application/json; charset=utf-8")
                             .setStatusCode(200)
                             .end(formResponse(res.result().body().toString(), median).encode());
                 });
             }
             else if (requested.equals("node01")) {
+                System.out.println("node01 requested");
                 eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
                     response.putHeader("content-type", "application/json; charset=utf-8")
                             .setStatusCode(200)
