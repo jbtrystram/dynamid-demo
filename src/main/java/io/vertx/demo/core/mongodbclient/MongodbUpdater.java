@@ -31,15 +31,18 @@ public class MongodbUpdater extends AbstractVerticle {
         //mongoDB settings, get from config json file
         JsonObject mongoConfig = config();
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
+        System.out.println("connected to mongo");
 
         //When new message on raw_temperature on bus
         eb.<JsonObject> consumer(busAddress, message -> {
             mongoClient.insert(busAddress, message.body(), res -> {
+                System.out.println("inserted raw data "+ res.result());
             });
         });
 
         //When new message on median_temperature on bus
         eb.<JsonObject> consumer(busProcessedAdress, message -> {
+            System.out.println("new median temp data");
             mongoClient.insert(busProcessedAdress, message.body(), res -> {
             });
         });
