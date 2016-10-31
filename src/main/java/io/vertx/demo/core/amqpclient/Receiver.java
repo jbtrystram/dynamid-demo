@@ -20,7 +20,7 @@ public class Receiver extends AbstractVerticle {
 
   // Settings
   final String amqptopicAddress = "temperature";
-  final String amqpServer = "10.45.0.151";
+  final String amqpServer = "localhost";
 
   @Override
   public void start() throws Exception {
