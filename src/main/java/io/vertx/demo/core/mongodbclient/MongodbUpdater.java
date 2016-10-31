@@ -60,6 +60,7 @@ public class MongodbUpdater extends AbstractVerticle {
 
                 mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
+                        System.out.println("sending median temp: " + res.result().get(0));
                         message.reply(res.result().get(0));
                     } else {
                         message.reply(new JsonObject().put("fail", true));
@@ -80,6 +81,7 @@ public class MongodbUpdater extends AbstractVerticle {
                         message.reply(new JsonObject().put("fail", true));
 
                     }
+
                 });
             }
         });
