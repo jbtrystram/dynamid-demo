@@ -67,7 +67,7 @@ public class GrafanaApi extends AbstractVerticle {
                       .add(data.getDouble("value"))
                       .add(data.getLong("timestamp"))
                 );
-
+        System.out.println(array.encode());
         return array;
     }
 
@@ -122,16 +122,18 @@ public class GrafanaApi extends AbstractVerticle {
 
 
             if (requested.equals("median_temp")) {
-                eb.send(busDataRequest, new JsonObject().put("median", true), res -> {
+                eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
                     System.out.println("median_temp requested");
+                    System.out.println(res.result().body().toString());
                     response.putHeader("content-type", "application/json; charset=utf-8")
                             .setStatusCode(200)
                             .end(formResponse(res.result().body().toString(), median).encode());
                 });
             }
             else if (requested.equals("node01")) {
-                System.out.println("node01 requested");
+                System.out.println("node01 requested " + new JsonObject().put("requested", requested).encode());
                 eb.send(busDataRequest, new JsonObject().put("requested", requested), res -> {
+                    System.out.println(res.result().body().toString());
                     response.putHeader("content-type", "application/json; charset=utf-8")
                             .setStatusCode(200)
                             .end(formResponse(res.result().body().toString(), node01).encode());

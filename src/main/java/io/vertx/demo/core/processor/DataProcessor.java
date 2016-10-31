@@ -44,6 +44,7 @@ public class DataProcessor extends AbstractVerticle {
 
             //When new message on bus
             eb.<JsonObject> consumer(busAddress, message -> {
+                System.out.println("new message");
                 Double value = message.body().getDouble("value");
                 if (isNormal( value, medianTempValue)) {
                     computeAverage(value);
