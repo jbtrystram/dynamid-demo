@@ -11,7 +11,7 @@ from sense_hat import SenseHat
 ############### S E T T I N G S #############
 
 # Dependancies you want to install with apt-get
-deps = ["updaaate", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
+deps = ["update", "-y install git", "-y install curl", "-y install oracle-java8-jdk"]
 
 # Arbitrary commands you need to run
 commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git /demo", 
@@ -24,8 +24,8 @@ dockers = ["pull descol/rpi_pika",
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
 "stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
-"run -d -e RABBITMQ_NODENAME=rabbit --name rabbitMQ -p 15672:15672 -p 5672:5672 ronnyroos/rpi-rabbitmq",
-"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes -v mongodb:/mongodb descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
+"run -d -e RABBITMQ_NODENAME=rabbit --name rabbit -p 15672:15672 -p 5672:5672 ronnyroos/rpi-rabbitmq",
+"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
 "run  --rm --name mongoConfig --link=mongo:mongo  -v /tmp/nodes:/nodes descol/rpi-mongo:master1.6"
 ]
 
@@ -103,7 +103,7 @@ def install_dependencies():
 
 
     # Finally, launch the app
-    # "docker run --privileged --hostname " + hostname " --link rabbit:rabbit descol/rpi_pika"
+    # "docker run --rm --privileged --hostname `hostname` --link rabbit:rabbit descol/rpi_pika"
     #i = i+2
     #q.put(i)
 
