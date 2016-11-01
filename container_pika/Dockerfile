@@ -9,7 +9,8 @@ RUN apt-get -q update && \
         python-pip \
         python-dev \
         python-pip \
-        python-pika \
+	python-qpid-proton \
+        python-qpid-proton-docs \
         sense-hat
 
 COPY ./sense.py ./app.py
