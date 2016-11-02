@@ -103,7 +103,7 @@ def install_dependencies():
 
 
     # Finally, launch the app
-    # "docker run --rm --privileged --hostname `hostname` --link activemq:activemq descol/rpi_pika"
+    # "docker run -d --restart always --name pika --privileged --hostname `hostname` --link activemq:activemq descol/rpi_pika"
     #i = i+2
     #q.put(i)
 

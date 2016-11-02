@@ -33,7 +33,7 @@ public class MongodbUpdater extends AbstractVerticle {
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
 
         System.out.println("connected to mongo");
-        
+
         //When new message on raw_temperature on bus
         eb.<JsonObject> consumer(busAddress, message -> {
             mongoClient.insert(busAddress, message.body(), res -> {
