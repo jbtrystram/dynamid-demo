@@ -24,7 +24,7 @@ dockers = ["pull descol/rpi_pika",
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
 "stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
-"run -d --name activemq -P jbtrystram/activemq",
+"run -d --name activemq -p 5672:5672 -p 8161:8161 jbtrystram/activemq",
 "run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /demo/container_mongoDB/rpi/nodes:/nodes descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
 "run  --rm --name mongoConfig --link=mongo:mongo  -v /demo/container_mongoDB/rpi/nodes:/nodes descol/rpi-mongo:master1.6"
 ]

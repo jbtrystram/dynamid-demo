@@ -173,11 +173,15 @@ public class GrafanaApi extends AbstractVerticle {
 
             JsonArray dataResponse = new JsonArray();
 
-            CompositeFuture.all(getMedianTemp(eb), getNode01Temp(eb)).setHandler(connections -> {
+            CompositeFuture.all(getMedianTemp(eb), getNode01Temp(eb), getNode02Temp(eb),
+                    getNode03Temp(eb), getNode04Temp(eb)).setHandler(connections -> {
                 // all the Futures completed
                 dataResponse.add( (JsonObject) connections.result().resultAt(0));
                 dataResponse.add( (JsonObject) connections.result().resultAt(1));
-                
+                dataResponse.add( (JsonObject) connections.result().resultAt(2));
+                dataResponse.add( (JsonObject) connections.result().resultAt(3));
+                dataResponse.add( (JsonObject) connections.result().resultAt(4));
+
                 // Create response
                 response.putHeader("content-type", "application/json; charset=utf-8")
                         .setStatusCode(200)
