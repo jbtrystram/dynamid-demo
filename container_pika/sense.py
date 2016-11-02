@@ -52,7 +52,7 @@ def loop():
     while True:
        temp = sense.temp
        sense.show_message("%.1f" %temp + "C", 0.07)	
-       sendMessage(temp)
+       sendMessage("%.2f" %temp)
 
 def destroy():
         X = [255, 0, 0]  # Red
@@ -73,6 +73,7 @@ def destroy():
 
 
 if __name__ == '__main__': # Program start from here
+    sense.show_message("Dynamid",0.07)
     try:
         loop()
     except KeyboardInterrupt: # When 'Ctrl+C' is pressed, the child program destroy() will be executed.
