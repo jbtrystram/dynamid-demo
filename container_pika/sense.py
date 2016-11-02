@@ -52,7 +52,7 @@ def loop():
     while True:
        temp = sense.temp
        sense.show_message("%.1f" %temp + "C", 0.07)	
-       sendMessage("%.2f" %temp)
+       sendMessage(temp)
 
 def destroy():
         X = [255, 0, 0]  # Red
