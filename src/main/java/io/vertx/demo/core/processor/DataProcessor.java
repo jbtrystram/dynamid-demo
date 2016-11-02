@@ -39,7 +39,7 @@ public class DataProcessor extends AbstractVerticle {
 
             // Bus settings and instance
             final String busAddress = "raw_temperature";
-            final String busProcessedAdress = "median_temperature";
+            final String busProcessedAddress = "median_temperature";
             EventBus eb = vertx.eventBus();
 
             //When new message on bus
@@ -53,7 +53,7 @@ public class DataProcessor extends AbstractVerticle {
                         JsonObject data = new JsonObject();
                         data.put("timestamp", System.currentTimeMillis())
                                 .put("value", medianTempValue);
-                        eb.publish(busProcessedAdress, data);
+                        eb.publish(busProcessedAddress, data);
 
                     }
                 }
