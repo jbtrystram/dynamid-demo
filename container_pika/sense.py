@@ -15,7 +15,7 @@ class AmqpSender(MessagingHandler):
         super(HelloWorld, self).__init__()
         self.server = server
         self.address = address
-	self.body = body
+        self.body = body
 
     def on_start(self, event):
         conn = event.container.connect(self.server)
@@ -25,7 +25,7 @@ class AmqpSender(MessagingHandler):
     def on_sendable(self, event):
         event.sender.send(Message(body=self.body))
         event.sender.close()
-	event.connection.close()
+        event.connection.close()
 
 
 # get hostname
@@ -40,7 +40,7 @@ class Sender(MessagingHandler):
     def __init__(self, server, address, message_body):
         super(Sender, self).__init__()
 
-	self.server = server
+        self.server = server
         self.address = address
         self.message_body = message_body
 
@@ -66,12 +66,12 @@ class Sender(MessagingHandler):
 
 
 def sendMessage(temp):
-	amqpMsgPayload = {}
-	amqpMsgPayload["timestamp"] = int((time.time()*1000))
-	amqpMsgPayload["id"] = hostname[:-1]
-	amqpMsgPayload["value"] = temp
+        amqpMsgPayload = {}
+        amqpMsgPayload["timestamp"] = int((time.time()*1000))
+        amqpMsgPayload["id"] = hostname[:-1]
+        amqpMsgPayload["value"] = temp
 
-	print(json.dumps(amqpMsgPayload))
+        print(json.dumps(amqpMsgPayload))
         Container(AmqpSender("activemq:5672", "temperature", json.dumps(amqpMsgPayload))).run()
         print 'Message sent to AMQP server'
 
@@ -86,23 +86,23 @@ def loop():
        sendMessage(temp)
 
 def destroy():
-	X = [255, 0, 0]  # Red
-	O = [255, 255, 255]  # Black
+        X = [255, 0, 0]  # Red
+        O = [255, 255, 255]  # Black
 
-	cross = [
-	X, O, O, O, O, O, O, X,
-	O, X, O, O, O, O, X, O,
-	O, O, X, O, O, X, O, O,
-	O, O, O, X, X, O, O, O,
-	O, O, O, X, X, O, O, O,
-	O, O, X, O, O, X, O, O,
-	O, X, O, O, O, O, X, O,
-	X, O, O, O, O, O, O, X
-	]
+        cross = [
+        X, O, O, O, O, O, O, X,
+        O, X, O, O, O, O, X, O,
+        O, O, X, O, O, X, O, O,
+        O, O, O, X, X, O, O, O,
+        O, O, O, X, X, O, O, O,
+        O, O, X, O, O, X, O, O,
+        O, X, O, O, O, O, X, O,
+        X, O, O, O, O, O, O, X
+        ]
 
-	sense.set_pixels(cross)
+        sense.set_pixels(cross)
     
-    	connection.close()
+        connection.close()
 
 
 if __name__ == '__main__': # Program start from here
