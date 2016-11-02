@@ -2,6 +2,7 @@
 import time
 import datetime
 import json
+import sys
 from sense_hat import SenseHat
 #Proton import for AMQP
 from __future__ import print_function, unicode_literals
@@ -34,6 +35,36 @@ hostname = open('/etc/hostname').read()
 sense = SenseHat()
 
 
+#AMQP settings and connection
+class Sender(MessagingHandler):
+    def __init__(self, server, address, message_body):
+        super(Sender, self).__init__()
+
+	self.server = server
+        self.address = address
+        self.message_body = message_body
+
+        self.sent = False
+
+    def on_start(self, event):
+        conn = event.container.connect(self.server)
+        event.container.create_sender(self.address)
+        print("SENDER: Created sender for target address '{0}'".format(self.address))
+
+    def on_sendable(self, event):
+        if self.sent:
+            return
+
+        message = Message(self.message_body)
+        event.sender.send(message)
+
+        print("SENDER: Sent message '{0}'".format(self.message_body))
+
+        event.connection.close()
+        self.sent = True
+
+
+
 def sendMessage(temp):
 	amqpMsgPayload = {}
 	amqpMsgPayload["timestamp"] = int((time.time()*1000))
@@ -41,8 +72,7 @@ def sendMessage(temp):
 	amqpMsgPayload["value"] = temp
 
 	print(json.dumps(amqpMsgPayload))
-
-        Container(AmqpSender("localhost:5672", "temperature", json.dumps(amqpMsgPayload))).run()
+        Container(AmqpSender("activemq:5672", "temperature", json.dumps(amqpMsgPayload))).run()
         print 'Message sent to AMQP server'
 
 

@@ -31,15 +31,18 @@ public class MongodbUpdater extends AbstractVerticle {
         //mongoDB settings, get from config json file
         JsonObject mongoConfig = config();
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
+        System.out.println("connected to mongo");
 
         //When new message on raw_temperature on bus
         eb.<JsonObject> consumer(busAddress, message -> {
             mongoClient.insert(busAddress, message.body(), res -> {
+                System.out.println("inserted raw data "+ res.result());
             });
         });
 
         //When new message on median_temperature on bus
         eb.<JsonObject> consumer(busProcessedAdress, message -> {
+            System.out.println("new median temp data");
             mongoClient.insert(busProcessedAdress, message.body(), res -> {
             });
         });
@@ -52,10 +55,12 @@ public class MongodbUpdater extends AbstractVerticle {
             opts.setSort(new JsonObject().put("_id", -1));
 
             // get median temp
-            if (message.body().getBoolean("median")) {
+            System.out.println("got request " + message.body().encode());
+            if (message.body().getString("requested").equals("median_temp")) {
 
                 mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
+                        System.out.println("sending median temp: " + res.result().get(0));
                         message.reply(res.result().get(0));
                     } else {
                         message.reply(new JsonObject().put("fail", true));
@@ -64,13 +69,19 @@ public class MongodbUpdater extends AbstractVerticle {
             }
             // get raw individual nodes temp
             else {
-                opts.setFields(new JsonObject().put("id", message.body().getString("requested")));
+
+                opts.setFields(new JsonObject().put("id", message.body().getString("requested"))
+                                                .put("value", "").put("timestamp", ""));
                 mongoClient.findWithOptions(busAddress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
+                        System.out.println("success : "+res.result().get(0));
                         message.reply(res.result().get(0));
                     } else {
+                        System.out.println("fail");
                         message.reply(new JsonObject().put("fail", true));
+
                     }
+
                 });
             }
         });

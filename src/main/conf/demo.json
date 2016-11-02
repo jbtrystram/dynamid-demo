@@ -1,10 +1,10 @@
 {
   "hosts":[
 
-    {"host":"localhost","port":27020},
-    {"host":"localhost","port":27020},
-    {"host":"localhost","port":27020},
-    {"host":"localhost","port":27020}],
+    {"host":"10.45.0.51","port":27020},
+    {"host":"10.45.0.52","port":27020},
+    {"host":"10.45.0.53","port":27020},
+    {"host":"10.45.0.54","port":27020}],
 
   "replicaSet":"rs",
   "db_name":"test",
