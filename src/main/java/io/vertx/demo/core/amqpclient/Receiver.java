@@ -41,16 +41,14 @@ public class Receiver extends AbstractVerticle {
       // Set up a consumer using the bridge, register a handler for it.
       MessageConsumer<JsonObject> consumer = bridge.createConsumer(amqptopicAddress);
       consumer.handler(vertxMsg -> {
-        System.out.println("got a message");
         JsonObject amqpMsgPayload = vertxMsg.body();
         Object amqpBody = amqpMsgPayload.getValue(AmqpConstants.BODY);
-        System.out.println(amqpBody.toString());
 
         // Remove quotes around id
         JsonObject message = new JsonObject (amqpBody.toString());
         message.put("id", message.getString("id").substring(1,7));
         System.out.println(message.encode());
-        eb.publish(busAddress, amqpBody);
+        eb.publish(busAddress, message);
       });
     });
 

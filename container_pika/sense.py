@@ -37,7 +37,7 @@ sense = SenseHat()
 def sendMessage(temp):
         amqpMsgPayload = {}
         amqpMsgPayload["timestamp"] = int((time.time()*1000))
-        amqpMsgPayload["id"] = hostname[:-1]
+        amqpMsgPayload["id"] = '"'+hostname[:-1]+'"'
         amqpMsgPayload["value"] = temp
 
         print(json.dumps(amqpMsgPayload))
