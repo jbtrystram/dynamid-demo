@@ -14,7 +14,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 public class Receiver extends AbstractVerticle {
   // Convenience method so you can run it in your IDE
   public static void main(String[] args) {
-    Runner.runClusteredExample(Receiver.class);
+    Runner.runExample(Receiver.class);
   }
 
   // Settings
@@ -41,9 +41,10 @@ public class Receiver extends AbstractVerticle {
       // Set up a consumer using the bridge, register a handler for it.
       MessageConsumer<JsonObject> consumer = bridge.createConsumer(amqptopicAddress);
       consumer.handler(vertxMsg -> {
+        System.out.println("got a message");
         JsonObject amqpMsgPayload = vertxMsg.body();
         Object amqpBody = amqpMsgPayload.getValue(AmqpConstants.BODY);
-
+        System.out.println(amqpBody.toString());
         eb.publish(busAddress, amqpBody);
       });
     });

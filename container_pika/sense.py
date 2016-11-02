@@ -1,15 +1,31 @@
 #!/usr/bin/env python
 import time
-import pika
 import datetime
 import json
 from sense_hat import SenseHat
+#Proton import for AMQP
+from __future__ import print_function, unicode_literals
+from proton import Message
+from proton.handlers import MessagingHandler
+from proton.reactor import Container
 
+class AmqpSender(MessagingHandler):
+    def __init__(self, server, address, body):
+        super(HelloWorld, self).__init__()
+        self.server = server
+        self.address = address
+	self.body = body
 
-#AMQP settings and connection
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbit'))
-channel = connection.channel()
-channel.queue_declare(queue='temperature')
+    def on_start(self, event):
+        conn = event.container.connect(self.server)
+        event.container.create_receiver(conn, self.address)
+        event.container.create_sender(conn, self.address)
+
+    def on_sendable(self, event):
+        event.sender.send(Message(body=self.body))
+        event.sender.close()
+	event.connection.close()
+
 
 # get hostname
 hostname = open('/etc/hostname').read()
@@ -26,9 +42,7 @@ def sendMessage(temp):
 
 	print(json.dumps(amqpMsgPayload))
 
-        channel.basic_publish(exchange='',
-                          routing_key='temperature',
-                       body= json.dumps(amqpMsgPayload))
+        Container(AmqpSender("localhost:5672", "temperature", json.dumps(amqpMsgPayload))).run()
         print 'Message sent to AMQP server'
 
 
