@@ -15,7 +15,7 @@ deps = ["update", "-y install git", "-y install curl", "-y install oracle-java8-
 
 # Arbitrary commands you need to run
 commands = ["curl -sSL get.docker.com | sh", "git clone https://github.com/jbtrystram/dynamid-demo.git /demo", 
-"usermod -aG docker pi", "curl -o /tmp/nodes https://raw.githubusercontent.com/jbtrystram/dynamid-demo/master/container_mongoDB/rpi/nodes", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/java", "rm /usr/bin/javac", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
+"usermod -aG docker pi", "export JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt", "rm /usr/bin/java", "rm /usr/bin/javac", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/java /usr/bin/java", "ln -s /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/bin/javac /usr/bin/javac"]
 
 
 # Docker commands 
@@ -24,9 +24,9 @@ dockers = ["pull descol/rpi_pika",
 "pull descol/rpi-mongo:1.6",
 "pull descol/rpi-mongo:master1.6",
 "stop $(docker ps -a -q)", "rm -v -f $(docker ps -a -q)",
-"run -d -e RABBITMQ_NODENAME=rabbit --name rabbit -p 15672:15672 -p 5672:5672 ronnyroos/rpi-rabbitmq",
-"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /tmp/nodes:/nodes descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
-"run  --rm --name mongoConfig --link=mongo:mongo  -v /tmp/nodes:/nodes descol/rpi-mongo:master1.6"
+"run -d --name activemq -P jbtrystram/activemq",
+"run  -d --name mongo -p 27017:27017 -p 28017:28017 -v /demo/container_mongoDB/rpi/nodes:/nodes descol/rpi-mongo:1.6", "run --rm descol/rpi-mongo:1.6 /bin/sleep 5",
+"run  --rm --name mongoConfig --link=mongo:mongo  -v /demo/container_mongoDB/rpi/nodes:/nodes descol/rpi-mongo:master1.6"
 ]
 
 
@@ -103,7 +103,7 @@ def install_dependencies():
 
 
     # Finally, launch the app
-    # "docker run --rm --privileged --hostname `hostname` --link rabbit:rabbit descol/rpi_pika"
+    # "docker run --rm --privileged --hostname `hostname` --link activemq:activemq descol/rpi_pika"
     #i = i+2
     #q.put(i)
 

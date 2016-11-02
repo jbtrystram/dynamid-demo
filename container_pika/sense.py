@@ -1,25 +1,24 @@
 #!/usr/bin/env python
+from __future__ import print_function, unicode_literals
 import time
 import datetime
 import json
 import sys
 from sense_hat import SenseHat
 #Proton import for AMQP
-from __future__ import print_function, unicode_literals
 from proton import Message
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
 class AmqpSender(MessagingHandler):
     def __init__(self, server, address, body):
-        super(HelloWorld, self).__init__()
+        super(AmqpSender, self).__init__()
         self.server = server
         self.address = address
         self.body = body
 
     def on_start(self, event):
         conn = event.container.connect(self.server)
-        event.container.create_receiver(conn, self.address)
         event.container.create_sender(conn, self.address)
 
     def on_sendable(self, event):
@@ -42,8 +41,8 @@ def sendMessage(temp):
         amqpMsgPayload["value"] = temp
 
         print(json.dumps(amqpMsgPayload))
-        Container(AmqpSender("activemq:5672", "temperature", json.dumps(amqpMsgPayload))).run()
-        print 'Message sent to AMQP server'
+        Container(AmqpSender("activemq:5672", "temperature", amqpMsgPayload)).run()
+        print("Message sent to AMQP server")
 
 
 def loop():
@@ -71,8 +70,6 @@ def destroy():
         ]
 
         sense.set_pixels(cross)
-    
-        connection.close()
 
 
 if __name__ == '__main__': # Program start from here

@@ -27,7 +27,7 @@ public class Receiver extends AbstractVerticle {
 
 
     // Start the bridge, then use the event loop thread to process things thereafter.
-    bridge.start("localhost", 5672, res -> {
+    bridge.start(amqpServer, 5672, res -> {
       if(!res.succeeded()) {
         System.out.println("Bridge startup failed: " + res.cause());
         return;
@@ -45,6 +45,11 @@ public class Receiver extends AbstractVerticle {
         JsonObject amqpMsgPayload = vertxMsg.body();
         Object amqpBody = amqpMsgPayload.getValue(AmqpConstants.BODY);
         System.out.println(amqpBody.toString());
+
+        // Remove quotes around id
+        JsonObject message = new JsonObject (amqpBody.toString());
+        message.put("id", message.getString("id").substring(1,7));
+        System.out.println(message.encode());
         eb.publish(busAddress, amqpBody);
       });
     });

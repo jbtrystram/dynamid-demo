@@ -13,10 +13,11 @@ RUN apt-get -q update && \
         sense-hat
 RUN curl http://plugwash.raspbian.org/jessietest/private/pool/main/q/qpid-proton/python-qpid-proton_0.10-2_armhf.deb -o /tmp/proton.deb
 RUN curl https://archive.raspbian.org/raspbian/pool/main/o/openssl/libssl1.0.2_1.0.2j-1_armhf.deb -o /tmp/libssl.deb
+RUN apt-get install libqpid-proton2
 
 RUN dpkg -i /tmp/libssl.deb
 RUN dpkg -i /tmp/proton.deb
-
+RUN pip install python-qpid-proton
 
 
 COPY ./sense.py ./app.py
