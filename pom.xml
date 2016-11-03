@@ -154,6 +154,8 @@
             </execution>
 
             <!-- io.vertx.demo.core.bare.BareInstance.java  build -->
+
+            <!--
             <execution>
               <id>build-bare</id>
               <phase>package</phase>
@@ -174,7 +176,7 @@
                 <outputFile>${project.basedir}/fatjars/demo-dynamid-BareInstance-fat.jar</outputFile>
               </configuration>
             </execution>
-
+            -->
 
 
           </executions>
