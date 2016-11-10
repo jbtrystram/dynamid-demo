@@ -61,6 +61,7 @@ public class MongodbUpdater extends AbstractVerticle {
 
                 mongoClient.findWithOptions(busProcessedAdress, new JsonObject(), opts, res -> {
                     if (res.succeeded()) {
+
                         message.reply(res.result().get(0));
                     } else {
                         message.reply(new JsonObject().put("fail", true));

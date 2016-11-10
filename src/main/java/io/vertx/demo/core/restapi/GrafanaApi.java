@@ -82,7 +82,14 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "median_temp"), res -> {
-                    JsonObject data = formResponse(res.result().body().toString(), median);
+
+            JsonObject data;
+            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
+                data=median;
+            }
+            else{
+                data = formResponse(res.result().body().toString(), median);
+            }
                     callAFuture.complete(data);
                 });
         return callAFuture;
@@ -92,7 +99,13 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node01"), res -> {
-            JsonObject data = formResponse(res.result().body().toString(), node01);
+            JsonObject data;
+            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
+                data=node01;
+            }
+            else{
+                data = formResponse(res.result().body().toString(), node01);
+            }
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -102,7 +115,13 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node02"), res -> {
-            JsonObject data = formResponse(res.result().body().toString(), node02);
+            JsonObject data;
+            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
+                data=node02;
+            }
+            else{
+            data = formResponse(res.result().body().toString(), node02);
+            }
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -111,7 +130,13 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node03"), res -> {
-            JsonObject data = formResponse(res.result().body().toString(), node03);
+            JsonObject data;
+            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
+                data=node03;
+            }
+            else{
+                data = formResponse(res.result().body().toString(), node03);
+            }
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -121,7 +146,13 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node04"), res -> {
-            JsonObject data = formResponse(res.result().body().toString(), node04);
+            JsonObject data;
+            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
+                data=node04;
+            }
+            else{
+                data = formResponse(res.result().body().toString(), node04);
+            }
             callAFuture.complete(data);
         });
         return callAFuture;
