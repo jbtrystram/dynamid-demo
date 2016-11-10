@@ -84,12 +84,7 @@ public class GrafanaApi extends AbstractVerticle {
         eb.send(busDataRequest, new JsonObject().put("requested", "median_temp"), res -> {
 
             JsonObject data;
-            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
-                data=median;
-            }
-            else{
                 data = formResponse(res.result().body().toString(), median);
-            }
                     callAFuture.complete(data);
                 });
         return callAFuture;
@@ -100,12 +95,8 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node01"), res -> {
             JsonObject data;
-            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
-                data=node01;
-            }
-            else{
                 data = formResponse(res.result().body().toString(), node01);
-            }
+
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -116,12 +107,8 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node02"), res -> {
             JsonObject data;
-            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
-                data=node02;
-            }
-            else{
             data = formResponse(res.result().body().toString(), node02);
-            }
+
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -131,12 +118,8 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node03"), res -> {
             JsonObject data;
-            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
-                data=node03;
-            }
-            else{
-                data = formResponse(res.result().body().toString(), node03);
-            }
+            data = formResponse(res.result().body().toString(), node03);
+
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -147,12 +130,9 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node04"), res -> {
             JsonObject data;
-            if( new JsonObject (res.result().body().toString()).getBoolean("fail")){
-                data=node04;
-            }
-            else{
-                data = formResponse(res.result().body().toString(), node04);
-            }
+
+            data = formResponse(res.result().body().toString(), node04);
+
             callAFuture.complete(data);
         });
         return callAFuture;
@@ -188,11 +168,8 @@ public class GrafanaApi extends AbstractVerticle {
             System.out.println(" /search request");
                 response.putHeader("content-type", "application/json; charset=utf-8")
                         .setStatusCode(200)
-                        .end(new JsonArray().add("node01")
-                                            .add("node02")
-                                            .add("node03")
-                                            .add("node04")
-                                            .add("median_temp").encode());
+                        .end(new JsonArray().add("temperatures")
+                                            .encode());
         });
 
 
