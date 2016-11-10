@@ -67,6 +67,10 @@ public class GrafanaApi extends AbstractVerticle {
     private JsonObject formResponse(String incoming, JsonObject array){
         JsonObject data = new JsonObject(incoming);
 
+        if (data.getBoolean("fail",false)){
+            return array;
+        }
+
         array.getJsonArray("datapoints")
                 .add( new JsonArray()
                       .add(data.getDouble("value"))
