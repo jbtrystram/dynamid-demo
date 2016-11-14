@@ -40,11 +40,13 @@ public class DataProcessor extends AbstractVerticle {
             // Bus settings and instance
             final String busAddress = "raw_temperature";
             final String busProcessedAddress = "median_temperature";
+            Runtime.getRuntime().exec("python /demo/processor.py");
             EventBus eb = vertx.eventBus();
 
             //When new message on bus
             eb.<JsonObject> consumer(busAddress, message -> {
                 System.out.println("new message");
+                System.out.println( message.body().getString("id"));
                 Double value = message.body().getDouble("value");
                 if (isNormal( value, medianTempValue)) {
                     computeAverage(value);

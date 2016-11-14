@@ -28,6 +28,8 @@ public class MongodbUpdater extends AbstractVerticle {
         final String dataRequest = "data_request";
         EventBus eb = vertx.eventBus();
 
+        Runtime.getRuntime().exec("python /demo/mongo.py");
+
         //mongoDB settings, get from config json file
         JsonObject mongoConfig = config();
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoConfig);
