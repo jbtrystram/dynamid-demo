@@ -49,7 +49,7 @@ public class DataProcessor extends AbstractVerticle {
                 if (isNormal( value, medianTempValue)) {
                     computeAverage(value);
 
-                      if ((rawTempMsgCount % 3) == 0) {
+                      if ((rawTempMsgCount % 4) == 0) {
                         JsonObject data = new JsonObject();
                         data.put("timestamp", System.currentTimeMillis())
                                 .put("value", medianTempValue);
