@@ -3,15 +3,12 @@ package io.vertx.demo.core.restapi;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.impl.codecs.StringMessageCodec;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.StaticHandler;
 
 
 
@@ -30,8 +27,6 @@ public class GrafanaApi extends AbstractVerticle {
     // Convenience method so you can run it in your IDE
     public static void main(String[] args) { Runner.runClusteredExample(GrafanaApi.class); }
 
-    // tracing what grafana asked.
-    boolean queryMedium, query01, query02, query03, query04 = false;
 
     // A JsonArray to store the median datapoints between requests (grafana doesn't do it).
     private JsonObject median = new JsonObject()
@@ -86,11 +81,16 @@ public class GrafanaApi extends AbstractVerticle {
         Future<JsonObject> callAFuture = Future.future();
 
         eb.send(busDataRequest, new JsonObject().put("requested", "median_temp"), res -> {
-
             JsonObject data;
+            if(res.succeeded()){
                 data = formResponse(res.result().body().toString(), median);
-                    callAFuture.complete(data);
-                });
+            }
+            else{
+                data=median;
+            }
+            callAFuture.complete(data);
+        });
+
         return callAFuture;
     }
 
@@ -99,10 +99,15 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node01"), res -> {
             JsonObject data;
+            if(res.succeeded()){
                 data = formResponse(res.result().body().toString(), node01);
-
+            }
+            else{
+                data=node01;
+            }
             callAFuture.complete(data);
         });
+
         return callAFuture;
     }
 
@@ -111,10 +116,15 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node02"), res -> {
             JsonObject data;
-            data = formResponse(res.result().body().toString(), node02);
-
+            if(res.succeeded()){
+                data = formResponse(res.result().body().toString(), node02);
+            }
+            else{
+                data=node02;
+            }
             callAFuture.complete(data);
         });
+
         return callAFuture;
     }
     public Future<JsonObject> getNode03Temp(EventBus eb) {
@@ -122,10 +132,15 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node03"), res -> {
             JsonObject data;
-            data = formResponse(res.result().body().toString(), node03);
-
+            if(res.succeeded()){
+                data = formResponse(res.result().body().toString(), node03);
+            }
+            else{
+                data=node03;
+            }
             callAFuture.complete(data);
         });
+
         return callAFuture;
     }
 
@@ -134,9 +149,12 @@ public class GrafanaApi extends AbstractVerticle {
 
         eb.send(busDataRequest, new JsonObject().put("requested", "node04"), res -> {
             JsonObject data;
-
-            data = formResponse(res.result().body().toString(), node04);
-
+            if(res.succeeded()){
+                data = formResponse(res.result().body().toString(), node04);
+            }
+            else{
+                data=node04;
+            }
             callAFuture.complete(data);
         });
         return callAFuture;
