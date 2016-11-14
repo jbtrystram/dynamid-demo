@@ -29,6 +29,7 @@
       </tcp-ip>
     </join>
     <interfaces enabled="true">
+      <interface>10.45.0.254</interface>
       <interface>10.45.0.112</interface>
       <interface>10.45.0.51</interface>
       <interface>10.45.0.52</interface>
