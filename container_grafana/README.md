@@ -119,6 +119,18 @@ Supported variables:
 - `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
 - `GF_AWS_${profile}_REGION`: AWS region (optional).
 
+## To launch demo from descol repository
+
+Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` environment variable as a comma seperated list. This will pass each plugin name to `grafana-cli plugins install ${plugin}`.
+
+```
+docker run \
+  -d \
+  -p 3000:3000 \
+  --name=grafana \
+  -e "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" \
+  descol/rpi-grafana:v3.1.1
+```
 
 ## See:
 - [Grafana 3.0 Stable Released](http://grafana.org/blog/2016/05/11/grafana-3-0-stable-released.html) on the official blog
