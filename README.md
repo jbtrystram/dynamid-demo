@@ -39,3 +39,31 @@ The aim of this setup is to showcase a fully distributed monitoring system. Ever
      docker build -t mongo-setup .
      docker run --rm mongo-setup 
  ```
+
+ To run the demo you have to sudo and execute from `/demo`:
+
+```
+# to compile all fat-jars
+mvn clean package
+```
+
+```
+# from each node
+java -jar fatjars/demo-dynamid-Receiver-fat.jar -conf src/main/conf/demo.json
+```
+
+
+```
+# in one of the nodes
+java -jar fatjars/demo-dynamid-DataProcessor-fat.jar -ha -conf src/main/conf/demo.json
+```
+
+```
+# in another node
+java -jar fatjars/demo-dynamid-MongodbUpdater-fat.jar -ha -conf src/main/conf/demo.json
+```
+
+```
+# from the grafana node
+java -jar fatjars/demo-dynamid-GrafanaApi-fat.jar -conf src/main/conf/demo.json
+```
